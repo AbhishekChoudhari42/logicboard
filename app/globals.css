@@ -3,9 +3,11 @@
 @tailwind utilities;
 body{
   /* padding: 1rem; */
+  background-color: #111;
 }
 main{
   background-image: radial-gradient(#474bff 1px, transparent 1px);
+  /* background-image: radial-gradient(#474bff 1px, #111 1px); */
   background-size: 20px 20px;
   background-color: #ffffff;
   /* padding: 1rem; */
@@ -26,8 +28,9 @@ main{
   z-index: 5;
 }
 .gate-element{
-  background-color: #222;
+  background-color: #000;
   border-radius: 0.4rem;
+  opacity: 0.8;
   cursor: move;
   border: 2px solid #ffffff;
   transition: all 0.3s;
