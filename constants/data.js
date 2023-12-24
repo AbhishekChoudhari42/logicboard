@@ -1,93 +1,88 @@
 const data = {
-    a:{
-        pos:{
-            x:50,
-            y:50,
+    a: {
+        pos: {
+            x: 50,
+            y: 50,
         },
-        operation:'AND',
-        input:{
-            a:{
-                value:false,
-                source:null
-            },
-            b:{
-                value:false,
-                source:null
-            },
+        operation: 'AND',
+        input: [{
+            value: 1,
+            source: null
         },
-        output:true
+        {
+            value: 1,
+            source: null
+        }
+        ],
+        output: 0
     },
-    b:{
-        pos:{
-            x:50,
-            y:200,
+    b: {
+        pos: {
+            x: 50,
+            y: 200,
         },
-        operation:'AND',
-        input:{
-            a:{
-                value:false,
-                source:null
-            },
-            b:{
-                value:false,
-                source:null
-            },
+        operation: 'AND',
+        input: [{
+            value: 0,
+            source: null
         },
-        output:true
+        {
+            value: 1,
+            source: null
+        }
+        ],
+        output: 0
     },
-    c:{
-        pos:{
-            x:250,
-            y:125,
+    c: {
+        pos: {
+            x: 250,
+            y: 125,
         },
-        operation:'AND',
-        input:{
-            a:{
-                value:false,
-                source:'a'
-            },
-            b:{
-                value:false,
-                source:'b'
-            },
+        operation: 'NOT',
+        input: [{
+            value: 0,
+            source: 'a'
         },
-        output:true
+        {
+            value: 0,
+            source: 'b'
+        }
+        ],
+        output: 0
     },
-    d:{
-        pos:{
-            x:350,
-            y:350,
+    d: {
+        pos: {
+            x: 350,
+            y: 350,
         },
-        operation:'AND',
-        input:{
-            a:{
-                value:false,
-                source:null
-            },
-            b:{
-                value:false,
-                source:null
-            },
+        operation: 'AND',
+        input: [{
+            value: 0,
+            source: null
         },
-        output:true
+        {
+            value: 0,
+            source: null
+        }
+        ],
+        output: 0
     },
-    e:{
-        pos:{
-            x:150,
-            y:350,
+    e: {
+        pos: {
+            x: 150,
+            y: 350,
         },
-        operation:'AND',
-        input:{
-            a:{
-                value:false,
-                source:null
-            },
-            b:{
-                value:false,
-                source:null
-            },
+        operation: 'OR',
+        input: [{
+            value: 0,
+            source: 'c'
         },
-        output:true
+        {
+            value: 0,
+            source: 'd'
+        }
+        ],
+        output: 0
     },
 }
 

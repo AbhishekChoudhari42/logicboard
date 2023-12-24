@@ -1,10 +1,11 @@
 "use client"
 import { useEffect, useRef } from "react"
+import useGateStore from "@/store/store"
 
-const useDrag = (id,initialCoordinates,gates,setGates) =>{
+const useDrag = (id,initialCoordinates) =>{
     // console.log('id==',id)
     const isClicked = useRef(false)
-
+    const {gates,setGates} = useGateStore()
     const coords = useRef({
         startX:initialCoordinates.x,
         startY:initialCoordinates.y,

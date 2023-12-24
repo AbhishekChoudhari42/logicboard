@@ -46,8 +46,8 @@ export const renderNodes = (gates,ctx) => {
         
         const targetObj = gates[gate]
         const target = targetObj?.pos
-        const sourceA = gates[targetObj.input.a.source]?.pos
-        const sourceB = gates[targetObj.input.b.source]?.pos
+        const sourceA = gates[targetObj.input[0].source]?.pos
+        const sourceB = gates[targetObj.input[1].source]?.pos
         
         if(sourceA && target){
             let sourceA_pos = getInputOutputPos(sourceA.x,sourceA.y).output
@@ -74,28 +74,33 @@ export const renderNodeSVG = (gates) => {
         
         const targetObj = gates[gate]
         const target = targetObj?.pos
-        const sourceA = gates[targetObj.input.a.source]?.pos
-        const sourceB = gates[targetObj.input.b.source]?.pos
         
+        const sourceA = gates[targetObj.input[0].source]?.pos
+        const sourceB = gates[targetObj.input[1].source]?.pos
+        
+        const sourceAoutput = gates[targetObj.input[0].source]?.output
+        const sourceBoutput = gates[targetObj.input[1].source]?.output
+
         if(sourceA && target){
             let sourceA_pos = getInputOutputPos(sourceA.x,sourceA.y).output
             let target_pos = getInputOutputPos(target.x,target.y).inputA
-            arr.push(drawNodeSVG(target_pos.x,target_pos.y,sourceA_pos.x,sourceA_pos.y))
+            arr.push(drawNodeSVG(target_pos.x,target_pos.y,sourceA_pos.x,sourceA_pos.y,sourceAoutput))
         }
         if(sourceB && target){
             let sourceB_pos = getInputOutputPos(sourceB.x,sourceB.y).output
             let target_pos = getInputOutputPos(target.x,target.y).inputB
-            arr.push(drawNodeSVG(target_pos.x,target_pos.y,sourceB_pos.x,sourceB_pos.y))
+            arr.push(drawNodeSVG(target_pos.x,target_pos.y,sourceB_pos.x,sourceB_pos.y,sourceBoutput))
         }
     })
     return (arr)
 }
-
-export const drawNodeSVG = (x1,y1,x2,y2) => {
+import { v4 as uuid } from "uuid"
+export const drawNodeSVG = (x1,y1,x2,y2,output) => {
 
     let xHalf = Math.round(x2-x1)/2
     let yHalf = Math.round(y2-y1)/2
-    
-    const line = `M${x1} ${y1} L${x1+xHalf} ${y1} L${x1+xHalf} ${y1 + yHalf} L${x1+xHalf} ${y2} L${x2} ${y2}`
-    return <path id="ab" onClick={(e)=>{console.log(e.target.id)}}  d={line} stroke-width="2" fill="none" stroke='#f00'></path>
+    let line = `M${x1} ${y1} L${x1+xHalf} ${y1} L${x1+xHalf} ${y1 + yHalf} L${x1+xHalf} ${y2} L${x2} ${y2}`
+    let sign = Math.sign(x1-x2)
+
+    return <path className={`${output ? 'move':''}`} id="ab" key={uuid()} onClick={(e)=>{console.log(e.target.id)}}  d={line} strokeWidth="2" fill="none" stroke={`${output?'#0f0':'#f00'}`} strokeLinecap="round"></path>
 }

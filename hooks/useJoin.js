@@ -1,69 +1,55 @@
 "use client"
-import { useEffect, useRef } from "react"
+import useGateStore from "@/store/store"
+import { drawNode } from "@/utils/canvas"
+import { Exo_2 } from "next/font/google"
+import { useEffect } from "react"
 
-const useJoin = (id,initialCoordinates,gates,setGates) =>{
+const useJoin = (canvasRef) => {
 
-    const source = useRef(null)
+    const gateStore = useGateStore(state=>state)
+    console.log(gateStore)
+    const { currentSelection, setCurrentSelection ,gates,setGatesAfterNodeJoin} = gateStore
+    useEffect((currentSelection) => {
+        
+        if (!canvasRef) throw new Error("element not found")
+        
+        const ctx = canvasRef.current.getContext('2d')
 
-    const coords = useRef({
-        startX:initialCoordinates.x,
-        startY:initialCoordinates.y,
-        lastX:initialCoordinates.x,
-        lastY:initialCoordinates.y
-    })
-
-    useEffect(()=>{
-        const target = document.getElementById(id);
-        if(!target) throw new Error("element not found")
-        const targetChild = document.querySelector('#'+id+' .gate-element')
-        const container = target.parentElement
-        if(!container) throw new Error("element must have a parent")
-
-        const onMouseDown = (e) =>{
-            isClicked.current = true
-            coords.current.startX = e.clientX
-            coords.current.startY = e.clientY
-            console.log(isClicked)
-           
+        const onClick = () =>{
+            setCurrentSelection(null)
+            console.log(',esg')
         }
-
-        const onMouseUp = (e) =>{
-            isClicked.current = false
-            coords.current.lastX = target.offsetLeft
-            coords.current.lastY = target.offsetTop
+        
+        const onMouseUp = (e) => {
+            // console.log(currentSelection.startId)
+            setCurrentSelection(undefined)
         }
-
+        
         const onMouseMove = (e) => {
-            if(!isClicked.current){
-                target.style.boxShadow = 'none'
+            if (!currentSelection?.startId) {
                 return
             }
-            const nextX = e.clientX - coords.current.startX + coords.current.lastX
-            const nextY = e.clientY - coords.current.startY + coords.current.lastY
+            let gate = gates[currentSelection.startId]
 
-            let obj = gates[id]
-            obj.pos = {x:nextX,y:nextY}
-            let newGates = {...gates,[id]:obj}
-            setGates(newGates)
-            target.style.boxShadow = '3px 3px 10px #1111, -3px -3px 10px #1111, -3px 3px 10px #1111, 3px -3px 10px #1111'
-
+            console.log('move ==> ', currentSelection.startId)
+            ctx.clearRect(0,0,canvasRef.current.width, canvasRef.current.height)
+            drawNode(gate.pos.x,gate.pos.y,e.clientX,e.clientY,ctx)
         }
 
-        targetChild.addEventListener('mousedown',onMouseDown);
-        target.addEventListener('mouseup',onMouseUp);
-        container.addEventListener('mousemove',onMouseMove);
-        container.addEventListener('mouseleave',onMouseUp);
+        canvasRef.current.addEventListener('click', onClick);
+        canvasRef.current.addEventListener('mouseup', onMouseUp);
+        canvasRef.current.addEventListener('mousemove', (e)=>{onMouseMove(e,currentSelection)});
         
-        const cleanUp = () =>{
-
-            targetChild.removeEventListener('mousedown',onMouseDown);
-            target.removeEventListener('mouseup',onMouseUp);
-            container.removeEventListener('mousemove',onMouseMove);
-            container.removeEventListener('mouseleave',onMouseUp);
-
+        const cleanUp = () => {
+            if (canvasRef.current) {
+                canvasRef.current.removeEventListener('click', onClick);
+                canvasRef.current.removeEventListener('mouseup',onMouseUp);
+                canvasRef.current.removeEventListener('mousemove', (e)=>{onMouseMove(e,currentSelection)});
+            }
         }
 
         return cleanUp;
-    },[id])
-} 
-export default useDrag
+
+    }, [currentSelection])
+}
+export default useJoin
