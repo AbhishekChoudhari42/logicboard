@@ -8,7 +8,7 @@ const useGateStore = create((set) => ({
     setCurrentSelection: (elementData) => set(() => ({ currentSelection:elementData })),
     setGatesAfterNodeJoin: (gatesObject) => {
         gatesObject = evaluateLogic(gatesObject)
-        set(() => ({ gates: gatesObject }))
+        set(() => ({ gates: gatesObject , currentSelection:null}))
     },
 }))
 export default useGateStore

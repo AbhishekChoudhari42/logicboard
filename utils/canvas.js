@@ -1,21 +1,23 @@
+import { v4 as uuid } from "uuid"
+
 export const line = (x1,y1,x2,y2,ctx) => {
     ctx.moveTo(x1,y1)
     ctx.lineTo(x2,y2)
 }
 
-export const getInputOutputPos = (posX,posY) => {
-    return {
-        inputA:{
+export const getInputOutputPos = (posX,posY,inputLength) => {
+    let inputArray = []
+    for(let i = 0 ; i < inputLength ; i++){
+        inputArray.push({
             x:posX - 5,
-            y:posY + 10
-        },
-        inputB:{
-            x:posX-5,
-            y:posY+30
-        },
+            y:posY + 10 + i*20
+        })
+    }
+    return {
+        input:inputArray,
         output:{
+            y:posY + (inputLength/2)*20,
             x:posX + 50,
-            y:posY + 20
         }
     }
 }
@@ -46,20 +48,21 @@ export const renderNodes = (gates,ctx) => {
         
         const targetObj = gates[gate]
         const target = targetObj?.pos
-        const sourceA = gates[targetObj.input[0].source]?.pos
-        const sourceB = gates[targetObj.input[1].source]?.pos
+
+    //     const sourceA = gates[targetObj.input[0].source]?.pos
+    //     const sourceB = gates[targetObj.input[1].source]?.pos
         
-        if(sourceA && target){
-            let sourceA_pos = getInputOutputPos(sourceA.x,sourceA.y).output
-            let target_pos = getInputOutputPos(target.x,target.y).inputA
+    //     if(sourceA && target){
+    //         let sourceA_pos = getInputOutputPos(sourceA.x,sourceA.y).output
+    //         let target_pos = getInputOutputPos(target.x,target.y).inputA
             
-            drawNode(target_pos.x,target_pos.y,sourceA_pos.x,sourceA_pos.y,ctx)
-        }
-        if(sourceB && target){
-            let sourceB_pos = getInputOutputPos(sourceB.x,sourceB.y).output
-            let target_pos = getInputOutputPos(target.x,target.y).inputB
-            drawNode(target_pos.x,target_pos.y,sourceB_pos.x,sourceB_pos.y,ctx)
-        }
+    //         drawNode(target_pos.x,target_pos.y,sourceA_pos.x,sourceA_pos.y,ctx)
+    //     }
+    //     if(sourceB && target){
+    //         let sourceB_pos = getInputOutputPos(sourceB.x,sourceB.y).output
+    //         let target_pos = getInputOutputPos(target.x,target.y).inputB
+    //         drawNode(target_pos.x,target_pos.y,sourceB_pos.x,sourceB_pos.y,ctx)
+    //     }
     })
 }
 
@@ -75,32 +78,25 @@ export const renderNodeSVG = (gates) => {
         const targetObj = gates[gate]
         const target = targetObj?.pos
         
-        const sourceA = gates[targetObj.input[0].source]?.pos
-        const sourceB = gates[targetObj.input[1].source]?.pos
-        
-        const sourceAoutput = gates[targetObj.input[0].source]?.output
-        const sourceBoutput = gates[targetObj.input[1].source]?.output
-
-        if(sourceA && target){
-            let sourceA_pos = getInputOutputPos(sourceA.x,sourceA.y).output
-            let target_pos = getInputOutputPos(target.x,target.y).inputA
-            arr.push(drawNodeSVG(target_pos.x,target_pos.y,sourceA_pos.x,sourceA_pos.y,sourceAoutput))
-        }
-        if(sourceB && target){
-            let sourceB_pos = getInputOutputPos(sourceB.x,sourceB.y).output
-            let target_pos = getInputOutputPos(target.x,target.y).inputB
-            arr.push(drawNodeSVG(target_pos.x,target_pos.y,sourceB_pos.x,sourceB_pos.y,sourceBoutput))
-        }
+        for(let i = 0 ; i < targetObj?.input.length ; i++){
+            const sourceGate = gates[targetObj.input[i].source]
+            const source = sourceGate?.pos
+            if(source){    
+                let sourcePos = getInputOutputPos(source.x,source.y,sourceGate.input.length).output
+                let targetPos = getInputOutputPos(target.x,target.y,targetObj?.input.length).input[i]                
+                arr.push(drawNodeSVG(targetPos.x,targetPos.y,sourcePos.x,sourcePos.y,sourceGate?.output))
+            }
+        }        
     })
+
     return (arr)
 }
-import { v4 as uuid } from "uuid"
+
 export const drawNodeSVG = (x1,y1,x2,y2,output) => {
 
     let xHalf = Math.round(x2-x1)/2
     let yHalf = Math.round(y2-y1)/2
     let line = `M${x1} ${y1} L${x1+xHalf} ${y1} L${x1+xHalf} ${y1 + yHalf} L${x1+xHalf} ${y2} L${x2} ${y2}`
-    let sign = Math.sign(x1-x2)
 
     return <path className={`${output ? 'move':''}`} id="ab" key={uuid()} onClick={(e)=>{console.log(e.target.id)}}  d={line} strokeWidth="2" fill="none" stroke={`${output?'#0f0':'#f00'}`} strokeLinecap="round"></path>
 }

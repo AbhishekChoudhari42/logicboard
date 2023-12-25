@@ -3,7 +3,6 @@ import { useEffect, useRef } from "react"
 import useGateStore from "@/store/store"
 
 const useDrag = (id,initialCoordinates) =>{
-    // console.log('id==',id)
     const isClicked = useRef(false)
     const {gates,setGates} = useGateStore()
     const coords = useRef({
@@ -24,7 +23,6 @@ const useDrag = (id,initialCoordinates) =>{
             isClicked.current = true
             coords.current.startX = e.clientX
             coords.current.startY = e.clientY
-            console.log(isClicked)
            
         }
 
