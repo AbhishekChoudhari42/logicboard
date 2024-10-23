@@ -1,6 +1,6 @@
 "use client"
 import { useEffect, useRef } from "react"
-import useGateStore from "@/store/store"
+import useGateStore from "../store/store"
 
 const useDrag = (id,initialCoordinates) =>{
     const isClicked = useRef(false)
@@ -25,6 +25,14 @@ const useDrag = (id,initialCoordinates) =>{
             coords.current.startY = e.clientY
            
         }
+
+        const keyPress = (e) =>{
+            if(e.key == 'e'){
+                isClicked.current = false
+            }
+        }
+
+        window.addEventListener('keypress',keyPress)
 
         const onMouseUp = (e) =>{
             isClicked.current = false
@@ -54,6 +62,7 @@ const useDrag = (id,initialCoordinates) =>{
         container.addEventListener('mouseleave',onMouseUp);
         
         const cleanUp = () =>{
+            window.removeEventListener('keypress',keyPress)
 
             targetChild.removeEventListener('mousedown',onMouseDown);
             target.removeEventListener('mouseup',onMouseUp);

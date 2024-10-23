@@ -1,3 +1,4 @@
+"use client"
 import { v4 as uuid } from "uuid"
 
 export const line = (x1,y1,x2,y2,ctx) => {
@@ -78,12 +79,12 @@ export const renderNodeSVG = (gates) => {
         const targetObj = gates[gate]
         const target = targetObj?.pos
         
-        for(let i = 0 ; i < targetObj?.input.length ; i++){
+        for(let i = 0 ; i < targetObj?.input?.length ; i++){
             const sourceGate = gates[targetObj.input[i].source]
             const source = sourceGate?.pos
             if(source){    
-                let sourcePos = getInputOutputPos(source.x,source.y,sourceGate.input.length).output
-                let targetPos = getInputOutputPos(target.x,target.y,targetObj?.input.length).input[i]                
+                let sourcePos = getInputOutputPos(source.x,source.y,sourceGate.input?.length).output
+                let targetPos = getInputOutputPos(target.x,target.y,targetObj?.input?.length).input[i]                
                 arr.push(drawNodeSVG(targetPos.x,targetPos.y,sourcePos.x,sourcePos.y,sourceGate?.output))
             }
         }        
@@ -98,5 +99,5 @@ export const drawNodeSVG = (x1,y1,x2,y2,output) => {
     let yHalf = Math.round(y2-y1)/2
     let line = `M${x1} ${y1} L${x1+xHalf} ${y1} L${x1+xHalf} ${y1 + yHalf} L${x1+xHalf} ${y2} L${x2} ${y2}`
 
-    return <path className={`${output ? 'move':''}`} id="ab" key={uuid()} onClick={(e)=>{console.log(e.target.id)}}  d={line} strokeWidth="2" fill="none" stroke={`${output?'#0f0':'#f00'}`} strokeLinecap="round"></path>
+    return <path className={`${output ? 'move':''}`} id="ab" key={uuid()} onClick={(e)=>{console.log(e.target.id+'asasa')}}  d={line} strokeWidth="2" fill="none" stroke={`${output?'#0f0':'#f00'}`} strokeLinecap="round"></path>
 }

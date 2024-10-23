@@ -7,77 +7,34 @@ export default function evaluateLogic(gates){
     gateIdArray.forEach((id)=>{
         isVisited = {...isVisited,[id]:{count:0}}
     })
+
     function evaluateGate(id){
+
+        let inputArray = []
         
         if(isEvaluated.includes(id)){
             return gates[id].output;
         }
-        if(isVisited[id].count > 1){
+        if(isVisited[id].count > 2){
             return
         }
         isVisited[id].count = isVisited[id].count + 1; 
         let currentGate = gates[id];
-        let output
-
-        switch(currentGate.operation){
-            case 'AND':
-                output = 1
-                break
-            case 'OR':
-                output = 0
-                break
-            case 'NOT':
-                output = 0
-                break 
-        }
     
-        for(let i = 0 ; i < currentGate.input.length; i++){
+        for(let i = 0 ; i < currentGate.input?.length; i++){
             let gateId = currentGate?.input[i].source;
 
             if(!gateId){
-                switch(currentGate.operation){
-                    case 'AND':
-                        output *= currentGate?.input[i].value;
-                        break
-                    case 'OR':
-                        output += currentGate?.input[i].value;
-                        break
-                    case 'NOT':
-                        output += currentGate?.input[i].value;
-                        break
-                }
-                // output *= currentGate?.input[i].value;
+                let output = currentGate?.input[i].value;
+                inputArray.push(output)
             }else{
                 let op = evaluateGate(gateId)
                 gates[id].input[i].value = op
-
-                switch(currentGate.operation){
-                    case 'AND':
-                        output *= op
-                        break
-                    case 'OR':
-                        output += op
-                        break
-                    case 'NOT':
-                        output += op
-                        break
-                }
-                // output *= op
+                inputArray.push(op)
             }
         }
         isEvaluated.push(id)
-        switch(currentGate.operation){
-            case 'AND':
-                output = output
-                break
-            case 'OR':
-                output = output ? (output/output) : 0
-                break
-            case 'NOT':
-                output = !output
-                break
-        }
-        gates[id].output = output
+        gates[id].output = evaluateOutput(inputArray,currentGate.operation)
         return gates[id].output
     }
 
@@ -86,4 +43,22 @@ export default function evaluateLogic(gates){
     })
     return gates
 
+}
+
+function evaluateOutput(inputArray,operation){
+    let finalOutput
+    switch(operation){
+        case 'SRC':
+            finalOutput = 1
+        case 'AND':
+            finalOutput = inputArray.reduce((a,b)=> a*b,1)
+            break
+        case 'OR':
+            finalOutput = inputArray.reduce((a,b) => a+b,0)
+            break
+        case 'NOT':
+            finalOutput = !inputArray[0]
+            break
+    }
+    return finalOutput
 }

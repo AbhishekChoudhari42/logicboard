@@ -20,6 +20,37 @@ main{
   align-items: center;
   z-index: 5;
 }
+.btns{
+  top: 0.5rem;
+  left: 0.5rem;
+
+  position: absolute;
+  /* width: 100px; */
+  z-index: 100;
+
+
+}
+#save,#reset{
+  padding: 0.3rem 0.6rem;
+  border-radius: 10px;
+}
+#save{
+  font-size: small;
+  background-color: #af47ff;
+  color: white;
+  top: 0;
+  left: 0;
+}
+#reset{
+  margin-left: 0.5rem;
+  background-color: #ff4d47;
+  color: white;
+  font-size: small;
+  top: 0;
+  left: 0;
+  z-index: 100;
+
+}
 .gate-element{
   background-color: #000;
   border-radius: 0.4rem;

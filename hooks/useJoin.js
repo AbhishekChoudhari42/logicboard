@@ -13,7 +13,8 @@ const useJoin = (svgRef) => {
         if (!svgRef) throw new Error(" svg element not found")
         
         const onClick = () =>{
-            setCurrentSelection(null)
+            console.log("secl")
+            // setCurrentSelection(undefined)
         }
         
         const onMouseUp = (e) => {
@@ -21,10 +22,12 @@ const useJoin = (svgRef) => {
         }
         
         const onMouseMove = (e,currentSelection) => {
+            console.log('sdsd')
             
             if (!currentSelection?.startId) {
                 return
             }
+            
             let gate = gates[currentSelection.startId]
         }
 

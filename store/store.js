@@ -1,6 +1,6 @@
 import { create } from 'zustand'
-import data from '@/constants/data'
-import evaluateLogic from '@/utils/logicEvaluator'
+import data from '../constants/data'
+import evaluateLogic from '../utils/logicEvaluator'
 const useGateStore = create((set) => ({
     gates: data,
     setGates: (gatesObject) => set(() => ({ gates: gatesObject })),

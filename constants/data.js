@@ -6,14 +6,55 @@ let data = {
             x: 50,
             y: 50,
         },
-        operation: 'AND',
+        operation: 'SRC',
+
+        output: 1
+    },
+    a1: {
+        pos: {
+            x: 50,
+            y: 50,
+        },
+        operation: 'SRC',
         input: [
         {
             value: 1,
             source: null
         },
+        ],
+        output: 1
+    },
+    qw: {
+        pos: {
+            x: 50,
+            y: 50,
+        },
+        operation: 'AND',
+        input: [
         {
-            value: 1,
+            value: 0,
+            source: null
+        },
+        {
+            value: 0,
+            source: null
+        }
+        ],
+        output: 0
+    },
+    l: {
+        pos: {
+            x: 50,
+            y: 50,
+        },
+        operation: 'AND',
+        input: [
+        {
+            value: 0,
+            source: null
+        },
+        {
+            value: 0,
             source: null
         }
         ],
@@ -30,13 +71,39 @@ let data = {
             source: null
         },
         {
-            value: 1,
+            value: 0,
             source: null
         }
         ],
         output: 0
     },
-    c: {
+    g: {
+        pos: {
+            x: 250,
+            y: 125,
+        },
+        operation: 'NOT',
+        input: [{
+            value: 0,
+            source: null
+        }
+        ],
+        output: 0
+    },
+    x: {
+        pos: {
+            x: 250,
+            y: 125,
+        },
+        operation: 'NOT',
+        input: [{
+            value: 0,
+            source: null
+        }
+        ],
+        output: 0
+    },
+    z: {
         pos: {
             x: 250,
             y: 125,
@@ -90,7 +157,7 @@ let data = {
     },
 }
 
-const testValue = 20
+const testValue = 2
 
 for(let i = 0 ; i < testValue ; i++){
 
@@ -116,6 +183,5 @@ for(let i = 0 ; i < testValue ; i++){
     }
     data = {...data,['id'+i]:obj}
 }
-console.log(data)
 
 export default data
